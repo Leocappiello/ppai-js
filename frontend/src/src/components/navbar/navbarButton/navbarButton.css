@@ -1,0 +1,31 @@
+@import '../../../main/App.scss';
+
+.navbarButton {
+    height: 70%;
+    color: white;
+    background-color: var(--third-color);
+    border: none;
+    transition: all 0.5s ease;
+    margin-bottom: -5%;
+    font-size: 1.2em;
+    letter-spacing: 0.05em;
+}
+
+.navbarButton:first-child{
+    border-radius: 15px 0 0 0;
+} 
+.navbarButton:last-child{
+    border-radius: 0 15px 0 0;
+}
+
+.navbarButton:hover{
+    transition: all 0.25s ease;
+    background-color: var(--fourth-color);
+    cursor: pointer;
+}
+
+button{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
