@@ -45,10 +45,10 @@ class RecursoTecnologico{
 
     }
 
-    buscarTipoRT(){
+    buscarTipoRT(nombre, descripcion){
         //5
-        let tipoRT = new TipoRecursoTecnologico('nombre', 'descripcion')
-        tipoRT.getNombre()
+        let tipoRT = new TipoRecursoTecnologico(nombre, descripcion)
+        return tipoRT.getNombre()
     }
 }
 

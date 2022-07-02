@@ -40,8 +40,8 @@ class CentroInvestigacion{
 
     buscarDatosRTSeleccionado(){
         //17. metodo no esta en el dc
-        let tipoRT = TipoRecursoTecnologico('nombre', 'descripcion')
-        tipoRT.buscarDatosRTSeleccionado()
+        //let tipoRT = TipoRecursoTecnologico('nombre', 'descripcion')
+        //tipoRT.buscarDatosRTSeleccionado()
     }
 
     mostrarCI(){

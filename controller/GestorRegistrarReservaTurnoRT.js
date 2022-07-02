@@ -1,7 +1,9 @@
+const data = require('../data/data.json')
 const RecursoTecnologico = require('../classes/RecursoTecnologico')
 const PantallaRegistrarReservaTurnoRT = require('./PantallaRegistrarReservaTurnoRT')
 const Estado = require('../classes/Estado')
 const CentroInvestigacion = require('../classes/CentroInvestigacion')
+const TipoRecursoTecnologico = require('../classes/TipoRecursoTecnologico')
 
 class GestorRegistrarReservaTurnoRT {
     constructor() {
@@ -9,19 +11,28 @@ class GestorRegistrarReservaTurnoRT {
     }
 
     tomarOpcionReservarTurnoRT() {
+        console.log('3. se va a llamar a buscar los rts')
         //3
-        this.buscarTipoRT()
+        return this.buscarTipoRT()
     }
 
     buscarTipoRT() {
-        //4
-        let recurso = new RecursoTecnologico('numeroRT',
-            'fechaAlta',
-            'imagenes',
-            'periodicidadMantenimientoPrev',
-            'duracionMatenimientoPrev',
-            'fraccionHorarioTurnos')
-        recurso.buscarTipoRT()
+        console.log('4. se crea un rt por cada obj')
+        
+        let arrTiposRT = [] 
+
+        for (let elem in data) {
+            let rt = new RecursoTecnologico(
+                'numeroRT',
+                'fechaAlta',
+                'imagenes',
+                'periodicidadMantenimientoPrev',
+                'duracionMatenimientoPrev',
+                'fraccionHorarioTurnos'
+            )
+            //5.
+            arrTiposRT.push(rt.buscarTipoRT(data[elem], data[elem]))
+        }
 
         //7
         let pantalla = new PantallaRegistrarReservaTurnoRT()
@@ -36,6 +47,7 @@ class GestorRegistrarReservaTurnoRT {
     buscarEstadoDisponible() {
         //11
         let estado = new Estado()
+        estado.esAmbitoRT()
         //
 
         //

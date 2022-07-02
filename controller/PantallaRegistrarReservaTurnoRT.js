@@ -8,14 +8,17 @@ class PantallaRegistrarReservaTurnoRT {
     }
 
     opcionReservarTurnoRT() {
+        console.log('1. se abre ventana y se toca opcion')
         //1
-        this.habilitarVentana()
+        let a = this.habilitarVentana()
+        console.log(a)
     }
 
     habilitarVentana() {
+        console.log('2. se habilita ventana y se llama gestor para traer rts')
         //2
         let gestor = new GestorRegistrarReservaTurnoRT()
-        gestor.tomarOpcionReservarTurnoRT()
+        return gestor.tomarOpcionReservarTurnoRT()
     }
 
     mostrarTipoRTParaSeleccion() {

@@ -1,0 +1,28 @@
+[
+    {
+        "name": "Balanza Marca Shidmazu, Modelo TXB622L",
+        "type": "Balanza de precisión",
+        "features": {
+            "capacidad": "620g",
+            "Indicación mínima": "0.01g",
+            "Repetitividad": "menor o igual a 0.01 g",
+            "Linealidad": "0.02 g",
+            "Tiempo de respuesta:": "2.0 segundos",
+            "Monitor": "LCD con luz negra",
+            "Dimensiones del plato de la balanza": "110mm de diametro",
+            "Peso del equipo": "1.55 kg"
+        }
+    },
+    {
+        "name": "Microscopio Marca Nikon Modelo MM-400/800",
+        "type": "Microscopio de medición",
+        "features": {
+            "Contador con lectura": "0.1μm",
+            "Pantalla LCD": "320x240 píxeles",
+            "Velocidad de enfoque": "0.5 segundos",
+            "Repetibilidad de enfoque": "hasta 0.5 μm",
+            "Velocidad de movimiento vertical": "10 mm/seg",
+            "Platina": "12 X 6"
+        }
+    }
+]
