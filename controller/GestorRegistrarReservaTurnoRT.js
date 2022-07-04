@@ -23,10 +23,12 @@ class GestorRegistrarReservaTurnoRT {
         let arrRT = []
         let arrTiposRTUnicos = []
         let arrTiposRT = []
-        //console.log(dataRT[elem].type);
+
         for (let elem in dataRT) {
             let rt = new RecursoTecnologico(
                 dataRT[elem].id,
+                dataRT[elem].modelo,
+                dataRT[elem].marca,
                 dataRT[elem].name,
                 dataRT[elem].type,
                 dataRT[elem].features,
@@ -146,7 +148,59 @@ class GestorRegistrarReservaTurnoRT {
             }
         }
         centrosConRTDelTipo = [...new Set(centrosConRTDelTipo)]
-        console.log(centrosConRTDelTipo);
+
+        let centrosConRT = []
+        for (let ind in centrosConRTDelTipo) {
+            let {
+                nombre,
+                sigla,
+                direccion,
+                edificio,
+                piso,
+                coordenadas,
+                telefonosContacto,
+                correoElectronico,
+                numeroResolucionCreacion,
+                fechaResolucionCreacion,
+                reglamento,
+                caracteristicasGenerales,
+                fechaAlta,
+                tiempoAntelacionReserva,
+                fechaBaja,
+                motivoBaja,
+                recursosTecnologicos,
+            } = dataCI[centrosConRTDelTipo[ind]]
+
+            let centro = new CentroInvestigacion(
+                nombre,
+                sigla,
+                direccion,
+                edificio,
+                piso,
+                coordenadas,
+                telefonosContacto,
+                correoElectronico,
+                numeroResolucionCreacion,
+                fechaResolucionCreacion,
+                reglamento,
+                caracteristicasGenerales,
+                fechaAlta,
+                tiempoAntelacionReserva,
+                fechaBaja,
+                motivoBaja,
+                recursosTecnologicos
+            )
+            centrosConRT.push(centro)
+        }
+        
+        //console.log(seleccionado); //rt del tipo y disponibles
+        //console.log(centrosConRT) //centros con esos recursos tecnologicos
+
+        
+        for(let centro in centrosConRT){
+            centrosConRT[centro].buscarDatosRTSeleccionado()
+        }
+        
     }
 
     verificarPerteneceCI() {
