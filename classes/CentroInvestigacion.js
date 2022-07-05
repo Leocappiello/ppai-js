@@ -1,6 +1,6 @@
-const TipoRecursoTecnologico = require('../classes/TipoRecursoTecnologico')
+const dataRT = require('../data/dataRT.json')
 
-class CentroInvestigacion{
+class CentroInvestigacion {
     constructor(
         nombre,
         sigla,
@@ -17,9 +17,9 @@ class CentroInvestigacion{
         fechaAlta,
         tiempoAntelacionReserva,
         fechaBaja,
-        motivoBaja
-    )
-    {
+        motivoBaja,
+        recursosTecnologicos
+    ) {
         this.nombre = nombre
         this.sigla = sigla
         this.direccion = direccion
@@ -36,44 +36,59 @@ class CentroInvestigacion{
         this.tiempoAntelacionReserva = tiempoAntelacionReserva
         this.fechaBaja = fechaBaja
         this.motivoBaja = motivoBaja
+        this.recursosTecnologicos = recursosTecnologicos
     }
 
-    buscarDatosRTSeleccionado(){
+    buscarDatosRTSeleccionado() {
         //17. metodo no esta en el dc
-        //let tipoRT = TipoRecursoTecnologico('nombre', 'descripcion')
-        //tipoRT.buscarDatosRTSeleccionado()
+        let idRecursos = []
+        let indexRecursos = []
+        let arrRT = this.recursosTecnologicos.RT
+
+        for(let elem in dataRT){
+            idRecursos.push(dataRT[elem].id)
+        }
+
+        arrRT.map((elem) => {
+            indexRecursos.push(idRecursos.indexOf(elem))
+        })
+
+        console.log(indexRecursos);
+        for(let index in indexRecursos){
+            console.log(dataRT[indexRecursos[index]]);
+        }
     }
 
-    mostrarCI(){
+    mostrarCI() {
         return this.nombre
     }
 
-    miDirectorActual(){
-        return 
+    miDirectorActual() {
+        return
     }
 
-    misDirectores(){
-
-    }
-
-    estoyActivo(){
+    misDirectores() {
 
     }
 
-    misCientificos(){
+    estoyActivo() {
 
     }
 
-    misCientificosActivos(){
+    misCientificos() {
 
     }
 
-    misRecursosTecnologicos(){
+    misCientificosActivos() {
 
     }
 
-    miBaja(){
-        
+    misRecursosTecnologicos() {
+
+    }
+
+    miBaja() {
+
     }
 
 }

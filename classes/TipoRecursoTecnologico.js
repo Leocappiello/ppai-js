@@ -7,6 +7,11 @@ class TipoRecursoTecnologico {
         this.nombre = nombre
         this.descripcion = descripcion
     }
+    
+    getNombre() {
+        //6
+        return this.nombre
+    }
 
     buscarDatosRTSeleccionado() {
         //18.
@@ -34,11 +39,6 @@ class TipoRecursoTecnologico {
 
     mostrarCategoria() {
 
-    }
-
-    getNombre() {
-        //6
-        return this.nombre.type
     }
 }
 

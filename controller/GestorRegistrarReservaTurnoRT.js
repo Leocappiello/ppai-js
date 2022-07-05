@@ -90,7 +90,7 @@ class GestorRegistrarReservaTurnoRT {
         this.buscarCI(estadosDisponibles)
     }
 
-    buscarCI(estadosDisponibles) {
+    buscarCI(seleccionado) {
         //14
 
         let centroInvestigacionObj = []
@@ -122,7 +122,7 @@ class GestorRegistrarReservaTurnoRT {
         }
 
         //15
-        this.buscarDatosRTSeleccionadoSegunCI(centroInvestigacionObj, estadosDisponibles)
+        this.buscarDatosRTSeleccionadoSegunCI(centroInvestigacionObj, seleccionado)
     }
 
     buscarDatosRTSeleccionadoSegunCI(centroInvestigacionObj, seleccionado) {
@@ -142,6 +142,7 @@ class GestorRegistrarReservaTurnoRT {
         let centrosConRTDelTipo = []
         for (let centro in centroInvestigacionObj) {
             for (let elem in seleccionado) {
+                //console.log(seleccionado[elem].type)
                 if (centroInvestigacionObj[centro].recursosTecnologicos.RT.includes(seleccionado[elem].id)) {
                     centrosConRTDelTipo.push(centro)
                 }
@@ -196,10 +197,10 @@ class GestorRegistrarReservaTurnoRT {
         //console.log(seleccionado); //rt del tipo y disponibles
         //console.log(centrosConRT) //centros con esos recursos tecnologicos
 
-        
         for(let centro in centrosConRT){
             centrosConRT[centro].buscarDatosRTSeleccionado()
         }
+        
         
     }
 
