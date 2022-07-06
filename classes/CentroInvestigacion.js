@@ -1,4 +1,6 @@
 const dataRT = require('../data/dataRT.json')
+const {TipoRecursoTecnologico} = require('./RecursoTecnologico')
+const AsignacionCientificoDelCI = require('./AsignacionCientificoDelCI')
 
 class CentroInvestigacion {
     constructor(
@@ -18,7 +20,8 @@ class CentroInvestigacion {
         tiempoAntelacionReserva,
         fechaBaja,
         motivoBaja,
-        recursosTecnologicos
+        recursosTecnologicos,
+        cientificos
     ) {
         this.nombre = nombre
         this.sigla = sigla
@@ -36,31 +39,58 @@ class CentroInvestigacion {
         this.tiempoAntelacionReserva = tiempoAntelacionReserva
         this.fechaBaja = fechaBaja
         this.motivoBaja = motivoBaja
-        this.recursosTecnologicos = recursosTecnologicos
+        this.recursosTecnologicos = recursosTecnologicos,
+        this.cientificos = cientificos
     }
 
     buscarDatosRTSeleccionado() {
         //17. metodo no esta en el dc
-        let idRecursos = []
-        let indexRecursos = []
-        let arrRT = this.recursosTecnologicos.RT
+        let idRecursos = [] //todos los recursos
+        let indexRecursos = [] //indices en la data
+        let arrRT = this.recursosTecnologicos.RT //id del recurso
 
-        for(let elem in dataRT){
+        for (let elem in dataRT) {
             idRecursos.push(dataRT[elem].id)
         }
 
         arrRT.map((elem) => {
             indexRecursos.push(idRecursos.indexOf(elem))
         })
-
-        console.log(indexRecursos);
-        for(let index in indexRecursos){
-            console.log(dataRT[indexRecursos[index]]);
+        
+        /*
+        console.log(idRecursos, 'id todos los recursos');
+        console.log(indexRecursos, 'posicion/es');
+        console.log(arrRT, 'id');
+        */
+        let tiposRT = []
+        for (let index in indexRecursos) {
+            let tipoRT = new TipoRecursoTecnologico(dataRT[indexRecursos[index]].name, dataRT[indexRecursos[index]].name)
+            tiposRT.push(tipoRT.buscarDatosRTSeleccionado(indexRecursos[index]))
         }
+        return tiposRT
     }
 
     mostrarCI() {
         return this.nombre
+    }
+
+    buscarCientifico(){
+        let asignacion = new AsignacionCientificoDelCI('', '')
+        let cientificosLegajo = asignacion.buscarCientifico()
+        return cientificosLegajo
+    }
+
+    buscarRT(legajos){
+        let nuevosRecursos = []
+        let recursos = this.cientificos
+        
+        for(let legajo in legajos){
+            if(recursos.includes(legajos[legajo])){
+                nuevosRecursos.push(legajos[legajo])
+            }
+        }
+        
+        return nuevosRecursos
     }
 
     miDirectorActual() {

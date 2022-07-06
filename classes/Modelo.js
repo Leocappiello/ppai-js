@@ -3,12 +3,11 @@ const Marca = require("./Marca")
 class Modelo{
     constructor(nombre, marca){
         this.nombre = nombre
-        this.marca = marca
+        this.marca = new Marca(marca)
     }
 
-    mostrarModelo(modelo){
-        modelo.marca.mostrarMarca()
-        return this.nombre
+    mostrarModelo(){
+        return this
     }
 }
 

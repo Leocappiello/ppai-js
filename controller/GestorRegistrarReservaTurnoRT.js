@@ -3,10 +3,10 @@ const dataRT = require('../data/dataRT.json')
 const dataCI = require('../data/dataCI.json')
 
 //
-const RecursoTecnologico = require('../classes/RecursoTecnologico')
+const {TipoRecursoTecnologico, RecursoTecnologico} = require('../classes/RecursoTecnologico')
+//const  = require('../classes/RecursoTecnologico')
 const Estado = require('../classes/Estado')
 const CentroInvestigacion = require('../classes/CentroInvestigacion')
-const TipoRecursoTecnologico = require('../classes/TipoRecursoTecnologico')
 
 
 class GestorRegistrarReservaTurnoRT {
@@ -16,7 +16,9 @@ class GestorRegistrarReservaTurnoRT {
 
     tomarOpcionReservarTurnoRT() {
         //3
-        this.buscarTipoRT()
+        let buscarTipo = this.buscarTipoRT()
+        let pantalla = new PantallaRegistrarReservaTurnoRT()
+        pantalla.mostrarDatosRTSeleccionado(buscarTipo)
     }
 
     buscarTipoRT() {
@@ -58,13 +60,15 @@ class GestorRegistrarReservaTurnoRT {
 
         //7
         let pantalla = new PantallaRegistrarReservaTurnoRT()
-        pantalla.mostrarTipoRTParaSeleccion(arrTiposRT)
+        let mostrarTipo = pantalla.mostrarTipoRTParaSeleccion(arrTiposRT)
+        return mostrarTipo
     }
 
     //10
     tomarSeleccionTipoRT(tipos) {
         let tipoSeleccionado = tipos[0] //ejemplo de seleccion
-        this.buscarEstadoDisponible(tipoSeleccionado)
+        let tomarSeleccion = this.buscarEstadoDisponible(tipoSeleccionado)
+        return tomarSeleccion
     }
 
     //10
@@ -87,7 +91,8 @@ class GestorRegistrarReservaTurnoRT {
         }
 
         //13
-        this.buscarCI(estadosDisponibles)
+        let buscarCI = this.buscarCI(estadosDisponibles)
+        return buscarCI
     }
 
     buscarCI(seleccionado) {
@@ -114,7 +119,8 @@ class GestorRegistrarReservaTurnoRT {
                 dataCI[centro].tiempoAntelacionReserva,
                 dataCI[centro].fechaBaja,
                 dataCI[centro].motivoBaja,
-                dataCI[centro].recursosTecnologicos
+                dataCI[centro].recursosTecnologicos,
+                dataCI[centro].cientificos
             )
 
             centroInvestigacionNombresArr.push(centroInvestigacion.mostrarCI())
@@ -122,27 +128,18 @@ class GestorRegistrarReservaTurnoRT {
         }
 
         //15
-        this.buscarDatosRTSeleccionadoSegunCI(centroInvestigacionObj, seleccionado)
+        let buscarDatos = this.buscarDatosRTSeleccionadoSegunCI(centroInvestigacionObj, seleccionado)
+        return buscarDatos
     }
 
     buscarDatosRTSeleccionadoSegunCI(centroInvestigacionObj, seleccionado) {
         //16
-        /*
-        console.log("del tipo seleccionado:");
-        for (let elem in seleccionado) {
-            console.log(seleccionado[elem].id);
-        }
-        for (let centro in centroInvestigacionObj) {
-            console.log("rt de cada centro:");
-            console.log(centroInvestigacionObj[centro].recursosTecnologicos.RT)
-            console.log("numero de centro");
-            console.log(centro);
-        }
-        */
+        //console.log(seleccionado)
+        //console.log(centroInvestigacionObj);
+
         let centrosConRTDelTipo = []
         for (let centro in centroInvestigacionObj) {
             for (let elem in seleccionado) {
-                //console.log(seleccionado[elem].type)
                 if (centroInvestigacionObj[centro].recursosTecnologicos.RT.includes(seleccionado[elem].id)) {
                     centrosConRTDelTipo.push(centro)
                 }
@@ -170,6 +167,7 @@ class GestorRegistrarReservaTurnoRT {
                 fechaBaja,
                 motivoBaja,
                 recursosTecnologicos,
+                cientificos
             } = dataCI[centrosConRTDelTipo[ind]]
 
             let centro = new CentroInvestigacion(
@@ -189,7 +187,8 @@ class GestorRegistrarReservaTurnoRT {
                 tiempoAntelacionReserva,
                 fechaBaja,
                 motivoBaja,
-                recursosTecnologicos
+                recursosTecnologicos,
+                cientificos
             )
             centrosConRT.push(centro)
         }
@@ -197,27 +196,95 @@ class GestorRegistrarReservaTurnoRT {
         //console.log(seleccionado); //rt del tipo y disponibles
         //console.log(centrosConRT) //centros con esos recursos tecnologicos
 
+        let centrosArr = []
         for(let centro in centrosConRT){
-            centrosConRT[centro].buscarDatosRTSeleccionado()
+            centrosArr.push(centrosConRT[centro].buscarDatosRTSeleccionado())
         }
-        
-        
+        return centrosArr
     }
 
-    verificarPerteneceCI() {
+    verificarPerteneceCI(seleccion) {
+        //let centroInv = new CentroInvestigacion()
+        let centrosConRT = []
+        for(let obj in dataCI){
+            let {
+                nombre,
+                sigla,
+                direccion,
+                edificio,
+                piso,
+                coordenadas,
+                telefonosContacto,
+                correoElectronico,
+                numeroResolucionCreacion,
+                fechaResolucionCreacion,
+                reglamento,
+                caracteristicasGenerales,
+                fechaAlta,
+                tiempoAntelacionReserva,
+                fechaBaja,
+                motivoBaja,
+                recursosTecnologicos,
+                cientificos
+            } = dataCI[obj]
+
+            let centro = new CentroInvestigacion(
+                nombre,
+                sigla,
+                direccion,
+                edificio,
+                piso,
+                coordenadas,
+                telefonosContacto,
+                correoElectronico,
+                numeroResolucionCreacion,
+                fechaResolucionCreacion,
+                reglamento,
+                caracteristicasGenerales,
+                fechaAlta,
+                tiempoAntelacionReserva,
+                fechaBaja,
+                motivoBaja,
+                recursosTecnologicos,
+                cientificos
+            )
+            centrosConRT.push(centro)
+        }
+        
+        let legajosCientificos 
+
+        for(let centro in centrosConRT){
+            legajosCientificos = centrosConRT[centro].buscarCientifico()
+        }
+
+        let recursosDelCI = []
+
+        for(let centro in centrosConRT){
+            if(centrosConRT[centro].buscarRT(legajosCientificos).length > 0){
+                recursosDelCI = [...recursosDelCI, centrosConRT[centro].buscarRT(legajosCientificos)]
+            }   
+        }
+
+        console.log(recursosDelCI);
+        this.obtenerTurnosRTSeleccionado()
 
     }
 
     obtenerTurnosRTSeleccionado() {
 
+        console.log(this.getFechaActual());
+        console.log(this.getHoraActual());
+
     }
 
     getFechaActual() {
-
+        let date = new Date().toLocaleDateString();
+        return date
     }
 
     getHoraActual() {
-
+        let time = new Date().toLocaleTimeString();
+        return time
     }
 
     tomarTurnoSeleccionado() {
@@ -274,21 +341,25 @@ class PantallaRegistrarReservaTurnoRT {
         //se obtiene seleccion
 
         //8
-        this.tomarSeleccionTipoRT(tipos)
+        let tomarSeleccion = this.tomarSeleccionTipoRT(tipos)
+        return tomarSeleccion
     }
 
     tomarSeleccionTipoRT(tipos) {
         //9
         let gestor = new GestorRegistrarReservaTurnoRT()
-        gestor.tomarSeleccionTipoRT(tipos)
+        return gestor.tomarSeleccionTipoRT(tipos)
     }
 
-    mostrarDatosRTSeleccionado() {
-
+    mostrarDatosRTSeleccionado(tiposAMostrar) {
+        //console.log(tiposAMostrar);
+        this.tomarRTAUtilizar(tiposAMostrar)
     }
 
-    tomarRTAUtilizar() {
-
+    tomarRTAUtilizar(tiposAMostrar) {
+        let random = Math.floor(Math.random() * 2)
+        let gestor = new GestorRegistrarReservaTurnoRT()
+        gestor.verificarPerteneceCI(tiposAMostrar[random])
     }
 
     mostrarTurnosParaSeleccion() {

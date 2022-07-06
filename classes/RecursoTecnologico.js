@@ -1,4 +1,59 @@
-const TipoRecursoTecnologico = require('./TipoRecursoTecnologico')
+const dataRT = require('../data/dataRT.json')
+//
+const Modelo = require('../classes/Modelo')
+const CambioEstadoRT = require('./CambioEstadoRT')
+
+class TipoRecursoTecnologico {
+    constructor(nombre, descripcion) {
+        this.nombre = nombre
+        this.descripcion = descripcion
+    }
+
+    getNombre() {
+        //6
+        return this.nombre
+    }
+
+    buscarDatosRTSeleccionado(recursos) {
+        let recursosID = []
+        Array(dataRT[recursos]).map((elem) => { recursosID.push(Object(elem).id) })
+
+        //console.log(recursosID, 'id de cada recurso');
+        
+        //19.
+        let { id,
+            name,
+            marca,
+            type,
+            features,
+            nroInventory,
+            fechaAlta,
+            respTecRecurso,
+            disponibility,
+            pathImages } = dataRT[recursos]
+
+        let rt = new RecursoTecnologico(
+            id,
+            name,
+            new Modelo(dataRT[recursos].name, dataRT[recursos].marca).mostrarModelo(),
+            marca,
+            type,
+            features,
+            new CambioEstadoRT('fechaHoraDesde', 'fechaHoraHasta').getEstadoActual(),
+            nroInventory,
+            fechaAlta,
+            respTecRecurso,
+            disponibility,
+            pathImages,
+        )
+
+        return rt
+    }
+
+    mostrarCategoria() {
+
+    }
+}
 
 class RecursoTecnologico {
     constructor(
@@ -64,4 +119,7 @@ class RecursoTecnologico {
     }
 }
 
-module.exports = RecursoTecnologico
+module.exports = {
+    RecursoTecnologico, 
+    TipoRecursoTecnologico
+}

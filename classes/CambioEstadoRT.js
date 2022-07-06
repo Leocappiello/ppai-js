@@ -1,18 +1,26 @@
-class CambioEstadoRT{
+const Estado = require('./Estado')
+
+class CambioEstadoRT {
     constructor(
         fechaHoraDesde,
         fechaHoraHasta
-    ){
+    ) {
         this.fechaHoraDesde = fechaHoraDesde
         this.fechaHoraHasta = fechaHoraHasta
     }
 
-    mostrarCambioEstadoRT(){
-        return 
+    mostrarCambioEstadoRT() {
+        return
     }
 
-    getEstadoActual(){
-
+    getEstadoActual() {
+        let estado = new Estado(
+            'nombre',
+            'descripcion',
+            'ambito',
+            'esReservable',
+            'esCancelable')
+        return estado.mostrarEstado()
     }
 
 }

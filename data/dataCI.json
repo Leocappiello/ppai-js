@@ -18,7 +18,8 @@
         "motivoBaja": "a",
         "recursosTecnologicos":{
             "RT": [0]   
-        }
+        },
+        "cientificos": [456]
     },
     {
         "nombre": "b",
@@ -39,7 +40,8 @@
         "motivoBaja": "b",
         "recursosTecnologicos":{
             "RT": []   
-        }
+        },
+        "cientificos": []
     },
     {
         "nombre": "c",
@@ -59,7 +61,8 @@
         "fechaBaja": "c",
         "motivoBaja": "c",
         "recursosTecnologicos":{
-            "RT": [1,5]   
-        }
+            "RT": [1,99]   
+        },
+        "cientificos": [123]
     }
 ]
