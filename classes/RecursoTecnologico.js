@@ -100,18 +100,21 @@ class RecursoTecnologico {
             let { fechaGeneracion,
                 diaSemana,
                 fechaHoraInicio,
-                fechaHoraFin } = turnos[turno]
+                fechaHoraFin,
+                estado } = turnos[turno]
 
             let nuevoTurno = new Turno(fechaGeneracion,
                 diaSemana,
                 fechaHoraInicio,
-                fechaHoraFin)
+                fechaHoraFin,
+                estado)
 
             turnosArr = nuevoTurno.esFechaPosterior(fechaActual)
             
         }
         //console.log("turnos posteriores:", turnosArr);
         //console.log(turnosArr);
+        
         return turnosArr
     }
 

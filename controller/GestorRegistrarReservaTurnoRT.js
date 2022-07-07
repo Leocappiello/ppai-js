@@ -1,3 +1,6 @@
+const { Router } = require('express')
+const router = Router()
+
 //data
 const dataRT = require('../data/dataRT.json')
 const dataCI = require('../data/dataCI.json')
@@ -18,6 +21,8 @@ class GestorRegistrarReservaTurnoRT {
     tomarOpcionReservarTurnoRT() {
         //3
         let buscarTipo = this.buscarTipoRT()
+        console.log("buscar tipos", buscarTipo);
+        return buscarTipo
         let pantalla = new PantallaRegistrarReservaTurnoRT()
         //23
         pantalla.mostrarDatosRTSeleccionado(buscarTipo)
@@ -36,7 +41,13 @@ class GestorRegistrarReservaTurnoRT {
                 dataRT[elem].name,
                 dataRT[elem].type,
                 dataRT[elem].features,
-                dataRT[elem].estado,
+                //dataRT[elem].estado,
+                new Estado(dataRT[elem].estado.nombre,
+                    dataRT[elem].estado.descripcion,
+                    dataRT[elem].estado.ambito,
+                    dataRT[elem].estado.esReservable,
+                    dataRT[elem].estado.esCancelable,
+                ),
                 dataRT[elem].nroInventory,
                 dataRT[elem].fechaAlta,
                 dataRT[elem].respTecRecurso,
@@ -44,7 +55,6 @@ class GestorRegistrarReservaTurnoRT {
                 dataRT[elem].pathImages,
                 dataRT[elem].numeroRT,
             )
-            console.log(dataRT[elem].estado);
             arrRT.push(rt)
         }
 
@@ -277,7 +287,7 @@ class GestorRegistrarReservaTurnoRT {
         let horaActual = this.getHoraActual();
         //console.log(this.getFechaActual(),this.getHoraActual());
 
-        let {id,
+        let { id,
             name,
             modelo,
             marca,
@@ -288,7 +298,7 @@ class GestorRegistrarReservaTurnoRT {
             fechaAlta,
             respTecRecurso,
             disponibility,
-            pathImages} = seleccion[0]
+            pathImages } = seleccion[0]
 
         let recursos = new RecursoTecnologico(
             id,
@@ -327,13 +337,14 @@ class GestorRegistrarReservaTurnoRT {
     buscarDatosTurnoSeleccionado(seleccion) {
         //console.log(this);
         //console.log(seleccion);
-        let turno = new Turno()
+        let turno = seleccion
         turno.mostrarTurno()
-        
+        console.log("turno seleccionado", seleccion);
+
         let pantalla = new PantallaRegistrarReservaTurnoRT()
         pantalla.solicitarOpcionNotificacion()
         pantalla.solicitarConfirmacionDeReserva()
-        this.registrarReservaParaCientifico()
+        this.registrarReservaParaCientifico(seleccion)
     }
 
     tomarOpcionNotificacionSelec() {
@@ -344,21 +355,30 @@ class GestorRegistrarReservaTurnoRT {
 
     }
 
-    registrarReservaParaCientifico() {
+    registrarReservaParaCientifico(seleccionado) {
         let estado = new Estado(
-
-        )
+            'no disponible',
+            'no disponible',
+            "ambito no disponible",
+            false,
+            true)
         estado.esAmbitoReserva()
         estado.esReservado()
-        this.actualizarEstadoTurno()
+        this.actualizarEstadoTurno(seleccionado, estado)
     }
 
-    actualizarEstadoTurno(seleccionado) {
-        //let turno 
-        //turno.reservarTurno(seleccionado)
+    actualizarEstadoTurno(seleccionado, nuevoEstado) {
+        //console.log("seleccionado desde actualizar", seleccionado);
+        let turno = new Turno(seleccionado.fechaGeneracion,
+            seleccionado.diaSemana,
+            seleccionado.fechaHoraInicio,
+            seleccionado.fechaHoraFin,
+            nuevoEstado)
+        console.log("turno a reservar",turno);
+        turno.reservarTurno(seleccionado)
     }
-    
-    generarNotificacionMail(){
+
+    generarNotificacionMail() {
 
     }
 
@@ -378,14 +398,14 @@ class PantallaRegistrarReservaTurnoRT {
     opcionReservarTurnoRT() {
         console.log('1. se abre ventana y se toca opcion')
         //1
-        this.habilitarVentana()
+        return this.habilitarVentana()
     }
 
     habilitarVentana() {
         console.log('2. se habilita ventana y se llama gestor para traer rts')
         //2
         let gestor = new GestorRegistrarReservaTurnoRT()
-        gestor.tomarOpcionReservarTurnoRT()
+        return gestor.tomarOpcionReservarTurnoRT()
     }
 
     mostrarTipoRTParaSeleccion(tipos) {
@@ -415,7 +435,7 @@ class PantallaRegistrarReservaTurnoRT {
 
     mostrarTurnosParaSeleccion(turnosPosteriores) {
         //console.log("turnos posteriores", turnosPosteriores);
-        let seleccion = ''
+        let seleccion = turnosPosteriores[0]
         let gestor = new GestorRegistrarReservaTurnoRT()
         gestor.buscarDatosTurnoSeleccionado(seleccion)
     }
@@ -436,9 +456,15 @@ class PantallaRegistrarReservaTurnoRT {
     }
 
 }
-
 //
-pantalla = new PantallaRegistrarReservaTurnoRT()
-pantalla.opcionReservarTurnoRT()
 
-module.exports = { GestorRegistrarReservaTurnoRT, PantallaRegistrarReservaTurnoRT }
+//routes
+router.get('/tipos', (req, res) => {
+    pantalla = new PantallaRegistrarReservaTurnoRT()
+    let response = pantalla.opcionReservarTurnoRT()
+    console.log("respuesta", response);
+    res.json(response)
+})
+
+
+module.exports = router, GestorRegistrarReservaTurnoRT, PantallaRegistrarReservaTurnoRT

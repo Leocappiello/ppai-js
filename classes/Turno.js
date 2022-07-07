@@ -7,12 +7,14 @@ class Turno {
         fechaGeneracion,
         diaSemana,
         fechaHoraInicio,
-        fechaHoraFin
+        fechaHoraFin,
+        estado
     ) {
         this.fechaGeneracion = fechaGeneracion
         this.diaSemana = diaSemana
         this.fechaHoraInicio = fechaHoraInicio
-        this.fechaHoraFin = fechaHoraFin
+        this.fechaHoraFin = fechaHoraFin,
+        this.estado = estado
     }
 
     mostrarTurno() {
@@ -45,8 +47,8 @@ class Turno {
     }
 
     getEstadoActual(){
-        let cambioEstadoTurno = 
-        setFechaHoraFin()
+        //let cambioEstadoTurno = 
+        //setFechaHoraFin()
         this.crearCambioEstado()
     }
 
