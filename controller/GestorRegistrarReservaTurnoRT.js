@@ -3,10 +3,11 @@ const dataRT = require('../data/dataRT.json')
 const dataCI = require('../data/dataCI.json')
 
 //
-const {TipoRecursoTecnologico, RecursoTecnologico} = require('../classes/RecursoTecnologico')
+const { TipoRecursoTecnologico, RecursoTecnologico } = require('../classes/RecursoTecnologico')
 //const  = require('../classes/RecursoTecnologico')
 const Estado = require('../classes/Estado')
 const CentroInvestigacion = require('../classes/CentroInvestigacion')
+const Turno = require('../classes/Turno')
 
 
 class GestorRegistrarReservaTurnoRT {
@@ -18,6 +19,7 @@ class GestorRegistrarReservaTurnoRT {
         //3
         let buscarTipo = this.buscarTipoRT()
         let pantalla = new PantallaRegistrarReservaTurnoRT()
+        //23
         pantalla.mostrarDatosRTSeleccionado(buscarTipo)
     }
 
@@ -42,6 +44,7 @@ class GestorRegistrarReservaTurnoRT {
                 dataRT[elem].pathImages,
                 dataRT[elem].numeroRT,
             )
+            console.log(dataRT[elem].estado);
             arrRT.push(rt)
         }
 
@@ -58,7 +61,6 @@ class GestorRegistrarReservaTurnoRT {
             arrTiposRT.push(tipoRT.getNombre())
         }
 
-        //7
         let pantalla = new PantallaRegistrarReservaTurnoRT()
         let mostrarTipo = pantalla.mostrarTipoRTParaSeleccion(arrTiposRT)
         return mostrarTipo
@@ -192,21 +194,22 @@ class GestorRegistrarReservaTurnoRT {
             )
             centrosConRT.push(centro)
         }
-        
+
         //console.log(seleccionado); //rt del tipo y disponibles
         //console.log(centrosConRT) //centros con esos recursos tecnologicos
 
         let centrosArr = []
-        for(let centro in centrosConRT){
+        for (let centro in centrosConRT) {
             centrosArr.push(centrosConRT[centro].buscarDatosRTSeleccionado())
         }
         return centrosArr
     }
 
     verificarPerteneceCI(seleccion) {
-        //let centroInv = new CentroInvestigacion()
+        //console.log("seleccion",seleccion);
+
         let centrosConRT = []
-        for(let obj in dataCI){
+        for (let obj in dataCI) {
             let {
                 nombre,
                 sigla,
@@ -250,31 +253,61 @@ class GestorRegistrarReservaTurnoRT {
             )
             centrosConRT.push(centro)
         }
-        
-        let legajosCientificos 
 
-        for(let centro in centrosConRT){
+        let legajosCientificos
+
+        for (let centro in centrosConRT) {
             legajosCientificos = centrosConRT[centro].buscarCientifico()
         }
 
         let recursosDelCI = []
 
-        for(let centro in centrosConRT){
-            if(centrosConRT[centro].buscarRT(legajosCientificos).length > 0){
+        for (let centro in centrosConRT) {
+            if (centrosConRT[centro].buscarRT(legajosCientificos).length > 0) {
                 recursosDelCI = [...recursosDelCI, centrosConRT[centro].buscarRT(legajosCientificos)]
-            }   
+            }
         }
 
-        console.log(recursosDelCI);
-        this.obtenerTurnosRTSeleccionado()
-
+        console.log("recursos del CI", recursosDelCI);
+        this.obtenerTurnosRTSeleccionado(seleccion)
     }
 
-    obtenerTurnosRTSeleccionado() {
+    obtenerTurnosRTSeleccionado(seleccion) {
+        let fechaActual = this.getFechaActual();
+        let horaActual = this.getHoraActual();
+        //console.log(this.getFechaActual(),this.getHoraActual());
 
-        console.log(this.getFechaActual());
-        console.log(this.getHoraActual());
+        let {id,
+            name,
+            modelo,
+            marca,
+            type,
+            features,
+            estado,
+            nroInventory,
+            fechaAlta,
+            respTecRecurso,
+            disponibility,
+            pathImages} = seleccion[0]
 
+        let recursos = new RecursoTecnologico(
+            id,
+            name,
+            modelo,
+            marca,
+            type,
+            features,
+            estado,
+            nroInventory,
+            fechaAlta,
+            respTecRecurso,
+            disponibility,
+            pathImages
+        )
+
+        let turnosPosteriores = recursos.getTurnosPosteriores(fechaActual, horaActual)
+        let pantalla = new PantallaRegistrarReservaTurnoRT()
+        pantalla.mostrarTurnosParaSeleccion(turnosPosteriores)
     }
 
     getFechaActual() {
@@ -291,8 +324,16 @@ class GestorRegistrarReservaTurnoRT {
 
     }
 
-    buscarDatosTurnoSeleccionado() {
-
+    buscarDatosTurnoSeleccionado(seleccion) {
+        //console.log(this);
+        //console.log(seleccion);
+        let turno = new Turno()
+        turno.mostrarTurno()
+        
+        let pantalla = new PantallaRegistrarReservaTurnoRT()
+        pantalla.solicitarOpcionNotificacion()
+        pantalla.solicitarConfirmacionDeReserva()
+        this.registrarReservaParaCientifico()
     }
 
     tomarOpcionNotificacionSelec() {
@@ -304,10 +345,20 @@ class GestorRegistrarReservaTurnoRT {
     }
 
     registrarReservaParaCientifico() {
+        let estado = new Estado(
 
+        )
+        estado.esAmbitoReserva()
+        estado.esReservado()
+        this.actualizarEstadoTurno()
     }
 
-    actualizarEstadoTurno() {
+    actualizarEstadoTurno(seleccionado) {
+        //let turno 
+        //turno.reservarTurno(seleccionado)
+    }
+    
+    generarNotificacionMail(){
 
     }
 
@@ -352,18 +403,21 @@ class PantallaRegistrarReservaTurnoRT {
     }
 
     mostrarDatosRTSeleccionado(tiposAMostrar) {
-        //console.log(tiposAMostrar);
+        //console.log("tipos a mostrar", tiposAMostrar);
         this.tomarRTAUtilizar(tiposAMostrar)
     }
 
     tomarRTAUtilizar(tiposAMostrar) {
-        let random = Math.floor(Math.random() * 2)
+        let random = Math.floor(Math.random() * 1) //
         let gestor = new GestorRegistrarReservaTurnoRT()
         gestor.verificarPerteneceCI(tiposAMostrar[random])
     }
 
-    mostrarTurnosParaSeleccion() {
-
+    mostrarTurnosParaSeleccion(turnosPosteriores) {
+        //console.log("turnos posteriores", turnosPosteriores);
+        let seleccion = ''
+        let gestor = new GestorRegistrarReservaTurnoRT()
+        gestor.buscarDatosTurnoSeleccionado(seleccion)
     }
 
     tomarTurnoSeleccionado() {
@@ -371,11 +425,14 @@ class PantallaRegistrarReservaTurnoRT {
     }
 
     solicitarOpcionNotificacion() {
-
+        //
+        let opcionNotificacion = ['email', 'whatsapp']
+        return opcionNotificacion[0]
     }
 
     solicitarConfirmacionDeReserva() {
-
+        let confirmacion = true
+        return confirmacion
     }
 
 }

@@ -62,6 +62,7 @@ class CentroInvestigacion {
         console.log(indexRecursos, 'posicion/es');
         console.log(arrRT, 'id');
         */
+       
         let tiposRT = []
         for (let index in indexRecursos) {
             let tipoRT = new TipoRecursoTecnologico(dataRT[indexRecursos[index]].name, dataRT[indexRecursos[index]].name)

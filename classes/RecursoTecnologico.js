@@ -1,7 +1,9 @@
 const dataRT = require('../data/dataRT.json')
+const dataTurnos = require('../data/dataTurnos.json')
 //
 const Modelo = require('../classes/Modelo')
 const CambioEstadoRT = require('./CambioEstadoRT')
+const Turno = require('./Turno')
 
 class TipoRecursoTecnologico {
     constructor(nombre, descripcion) {
@@ -19,7 +21,7 @@ class TipoRecursoTecnologico {
         Array(dataRT[recursos]).map((elem) => { recursosID.push(Object(elem).id) })
 
         //console.log(recursosID, 'id de cada recurso');
-        
+
         //19.
         let { id,
             name,
@@ -71,23 +73,46 @@ class RecursoTecnologico {
         pathImages,
     ) {
         this.id = id,
-        this.name = name,
-        this.modelo = modelo,
-        this.marca = marca,
-        this.type = type,
-        this.features = features,
-        this.estado = estado,
-        this.nroInventory = nroInventory,
-        this.fechaAlta = fechaAlta,
-        this.respTecRecurso = respTecRecurso,
-        this.disponibility = disponibility,
-        this.pathImages = pathImages
+            this.name = name,
+            this.modelo = modelo,
+            this.marca = marca,
+            this.type = type,
+            this.features = features,
+            this.estado = estado,
+            this.nroInventory = nroInventory,
+            this.fechaAlta = fechaAlta,
+            this.respTecRecurso = respTecRecurso,
+            this.disponibility = disponibility,
+            this.pathImages = pathImages
     }
 
     buscarTipoRT(nombre, descripcion) {
         //5
         let tipoRT = new TipoRecursoTecnologico(nombre, descripcion)
         return tipoRT.getNombre()
+    }
+
+    getTurnosPosteriores(fechaActual, horaActual) {
+        let turnos = dataTurnos
+        let turnosArr = []
+
+        for (let turno in turnos) {
+            let { fechaGeneracion,
+                diaSemana,
+                fechaHoraInicio,
+                fechaHoraFin } = turnos[turno]
+
+            let nuevoTurno = new Turno(fechaGeneracion,
+                diaSemana,
+                fechaHoraInicio,
+                fechaHoraFin)
+
+            turnosArr = nuevoTurno.esFechaPosterior(fechaActual)
+            
+        }
+        //console.log("turnos posteriores:", turnosArr);
+        //console.log(turnosArr);
+        return turnosArr
     }
 
     mostrarRT() {
@@ -120,6 +145,6 @@ class RecursoTecnologico {
 }
 
 module.exports = {
-    RecursoTecnologico, 
+    RecursoTecnologico,
     TipoRecursoTecnologico
 }
